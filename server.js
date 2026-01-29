@@ -5,16 +5,20 @@ import ExcelJS from "exceljs";
 
 const app = express();
 
-// ✅ CORS FIX for your domain + local dev
+// ✅ Proper CORS for Render + Browser preflight
 app.use(express.json());
+
 app.use(cors({
   origin: [
     "https://sunbonsys.in",
     "http://localhost:5173"
   ],
-  methods: ["GET", "POST"],
-  credentials: true
+  methods: ["GET", "POST", "OPTIONS"],
+  allowedHeaders: ["Content-Type"],
 }));
+
+// Handle preflight explicitly
+app.options("*", cors());
 
 // ✅ Root Check Route
 app.get("/", (req, res) => {
@@ -63,7 +67,7 @@ app.post("/submit", (req, res) => {
     [firstName, lastName, email, company, product, message],
     (err) => {
       if (err) return res.status(500).json({ error: err.message });
-      return res.json({ success: true, message: "✅ Message saved successfully!" });
+      return res.json({ success: true });
     }
   );
 });
@@ -76,7 +80,7 @@ app.get("/contacts", (req, res) => {
   });
 });
 
-// ✅ Export to Excel (Download Leads)
+// ✅ Export to Excel
 app.get("/export", (req, res) => {
   db.all("SELECT * FROM contacts ORDER BY createdAt DESC", async (err, rows) => {
     if (err) return res.status(500).send(err.message);
