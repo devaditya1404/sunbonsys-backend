@@ -17,8 +17,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type"],
 }));
 
-// Handle preflight explicitly
-app.options("*", cors());
+
 
 // ✅ Root Check Route
 app.get("/", (req, res) => {
