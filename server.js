@@ -125,6 +125,9 @@ app.get("/visits", (req, res) => {
 });
 
 // ✅ Start Server
-app.listen(5050, () => {
-  console.log("🚀 Backend Running at: http://localhost:5050");
+const PORT = process.env.PORT || 5050;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Backend Running on port ${PORT}`);
 });
+
