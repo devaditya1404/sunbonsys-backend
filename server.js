@@ -4,8 +4,17 @@ import sqlite3 from "sqlite3";
 import ExcelJS from "exceljs";
 
 const app = express();
-app.use(cors());
+
+// ✅ CORS FIX for your domain + local dev
 app.use(express.json());
+app.use(cors({
+  origin: [
+    "https://sunbonsys.in",
+    "http://localhost:5173"
+  ],
+  methods: ["GET", "POST"],
+  credentials: true
+}));
 
 // ✅ Root Check Route
 app.get("/", (req, res) => {
@@ -124,10 +133,9 @@ app.get("/visits", (req, res) => {
   });
 });
 
-// ✅ Start Server
+// ✅ Start Server (Render compatible)
 const PORT = process.env.PORT || 5050;
 
 app.listen(PORT, () => {
   console.log(`🚀 Backend Running on port ${PORT}`);
 });
-
